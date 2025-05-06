@@ -1,0 +1,92 @@
+<!DOCTYPE html> 
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Jogo da Velha</title>
+</head>
+<body bgcolor="#008080">
+    <center>
+        <h1>JOGO DA VELHA</h1>
+
+        <h3><p>Vitórias do X: <span id="vitoriasX">0</span></p>
+            <p>Vitórias do O: <span id="vitoriasO">0</span></p>
+            <p>Empates: <span id="empates">0</span></p>
+            </h3>
+            
+        <table border="1" cellspacing="0" cellpadding="15" bordercolor="white">
+            <tr>
+                <td data-indice="0" align="center" onclick="Click(event)" width="80" height="80"></td>
+                <td data-indice="1" align="center" onclick="Click(event)" width="80" height="80"></td>
+                <td data-indice="2" align="center" onclick="Click(event)" width="80" height="80"></td>
+            </tr>
+            <tr >
+                <td data-indice="3" align="center" onclick="Click(event)" width="80" height="80"></td>
+                <td data-indice="4" align="center" onclick="Click(event)" width="80" height="80"></td>
+                <td data-indice="5" align="center" onclick="Click(event)" width="80" height="80"></td>
+            </tr>
+            <tr>
+                <td data-indice="6" align="center" onclick="Click(event)" width="80" height="80"></td>
+                <td data-indice="7" align="center" onclick="Click(event)" width="80" height="80"></td>
+                <td data-indice="8" align="center" onclick="Click(event)" width="80" height="80"></td>
+            </tr>
+        </table>
+        
+    </center>
+
+    <script>
+        let tabuleiro = Array(9).fill(null);
+        let jogadorAtual = 'X';
+        let vitoriasX = 0;
+        let vitoriasO = 0;
+        let empates = 0;
+
+        const combinacoesVitoria = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+
+        function verificarVencedor() {
+            for (const combinacao of combinacoesVitoria) {
+                const [a, b, c] = combinacao;
+                if (tabuleiro[a] && tabuleiro[a] === tabuleiro[b] && tabuleiro[a] === tabuleiro[c]) {
+                    return tabuleiro[a];
+                }
+            }
+            return tabuleiro.includes(null) ? null : 'Empate';
+        }
+
+        function Click(event) {
+            let indice = event.target.dataset.indice;
+            if (tabuleiro[indice] || verificarVencedor()) return;
+
+            tabuleiro[indice] = jogadorAtual;
+            event.target.textContent = jogadorAtual;
+
+            let vencedor = verificarVencedor();
+            if (vencedor) {
+                if (vencedor === 'X') {
+                    vitoriasX++;
+                    document.getElementById('vitoriasX').textContent = vitoriasX;
+                } else if (vencedor === 'O') {
+                    vitoriasO++;
+                    document.getElementById('vitoriasO').textContent = vitoriasO;
+                } else if (vencedor === 'Empate') {
+                    empates++;
+                    document.getElementById('empates').textContent = empates;
+                }
+                setTimeout(reiniciarTabuleiro, 1000);
+            } else {
+                jogadorAtual = jogadorAtual === 'X' ? 'O' : 'X';
+            }
+        }
+
+        function reiniciarTabuleiro() {
+            tabuleiro.fill(null);
+            document.querySelectorAll('[data-indice]').forEach(celula => celula.textContent = '');
+            jogadorAtual = 'X';
+        }
+    </script>
+
+</body>
+</html>
