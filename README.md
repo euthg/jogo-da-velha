@@ -1,1 +1,1 @@
-<img src="jogo-da-velha.png">
+<img src="jogo-da-velha.png" width="100">
